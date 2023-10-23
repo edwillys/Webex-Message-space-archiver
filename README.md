@@ -87,7 +87,7 @@ Example HTML file of an archived Webex space:
 
 3. In the webexspacearchive-config.ini file, save your developer token or (👍better!) create an environment variable called "WEBEX_ARCHIVE_TOKEN" with your token 
 
-4. Run the script: ```python webex-space-archive.py```
+4. Run the script: ```python webex-space-archive.py``` or ```python webex-space-archive-all.py``` if you wish to backup all of the spaces at once.
 
 | parameter |  |
 | ------------- | ------------- |

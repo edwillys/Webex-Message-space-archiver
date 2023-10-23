@@ -26,6 +26,7 @@ import math    # for converting bytes to KB/MB/GB
 import string
 from pathlib import Path
 import configparser
+from os import path as osp
 try:
     assert sys.version_info[0:2] >= (3, 9)
 except:
@@ -51,6 +52,7 @@ printErrorList = True
 max_messages = 500
 currentDate = datetime.datetime.now().strftime("%x %X")
 configFile = "webexspacearchive-config.ini"
+curDir = osp.dirname(__file__)
 myMemberList = dict()
 myErrorList = list()
 downloadAvatarCount = 1
@@ -108,9 +110,9 @@ elif cl_count > 1:
 
 config = configparser.ConfigParser(allow_no_value=True)
 # ----------- CONFIG FILE: check if config file exists and if the mandatory settings entries are present.
-if os.path.isfile("./" + configFile):
+if os.path.isfile(configFile):
     try:
-        config.read('./' + configFile)
+        config.read(configFile)
         if config.has_option('Archive Settings', 'downloadfiles'):
             print(" *** NOTE!\n     Please change the key 'downloadfiles' in your .ini file to 'download'\n     or rename your .ini file and run this script to generate a new .ini file\n\n")
             beep(3)
@@ -189,7 +191,7 @@ if os.path.isfile("./" + configFile):
         print(" ---------------------------------------\n\n")
         beep(3)
         exit()
-elif os.path.isfile("./" + configFile.replace("webexspacearchive-config", "webexteamsarchive-config")):
+elif os.path.isfile(configFile.replace("webexspacearchive-config", "webexteamsarchive-config")):
     print(f" **ERROR** OLD config filename found!\n   RENAME 'webexteamsarchive-config.ini' to 'webexspacearchive-config.ini' and retry \n\n")
     beep(3)
     exit()
@@ -272,7 +274,7 @@ else:
         config.set('Archive Settings', ';   no / empty  = (default) no blurring')
         config.set('Archive Settings', ';   yes = blurring enabled')
         config.set('Archive Settings', 'blurring', '')
-        with open('./' + configFile, 'w') as configfile:
+        with open(osp.join(curDir,configFile), 'w') as configfile:
             config.write(configfile)
     except Exception as e:  # Error creating config file
         print(" ** ERROR ** creating config file")
@@ -1226,7 +1228,7 @@ def write_to_file(data, filename):
         while os.path.exists(filename):
             fileCounter += 1
             filename = f_name + "-" + "{:02d}".format(fileCounter) + "." + f_extension
-    with open("./" + filename, 'w', encoding='utf-8') as f:
+    with open(filename, 'w', encoding='utf-8') as f:
         if filename.split(".")[1] == "json":
             json.dump(data, f)
         else:
@@ -1360,7 +1362,7 @@ stopTimer("get space name", 0)
 # If no outputFileName has been configured: use the space name
 if outputFileName == "":
     outputFileName = format_filename(roomName)
-myOutputFolder = outputFileName
+myOutputFolder = osp.join(curDir, outputFileName)
 
 
 # =====  GET MESSAGES ==========================================================
